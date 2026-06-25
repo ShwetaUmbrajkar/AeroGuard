@@ -1,0 +1,31 @@
+# Virtual Environment
+aeroguard_env/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model weights
+*.pt
+*.pth
+*.onnx
+*.tflite
+
+# Datasets
+data/raw/
+data/processed/
+data/synthetic/
+
+# Logs and outputs
+logs/
+outputs/
+
+# VS Code settings
+.vscode/
