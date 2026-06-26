@@ -1,73 +1,140 @@
-# AeroGuard ✈️
+# ✈️ AeroGuard
 
-Edge AI-powered Intelligent Inspection & Predictive Maintenance system for Aircraft MRO.
+**Edge AI-Powered Intelligent Inspection & Predictive Maintenance System for Aircraft MRO**
 
-## Project Structure
+Built for **InnoVent-27** — AI at the Edge Solutions for Aerospace
 
-```
-AeroGuard/
-├── data/                  # datasets (raw, processed, synthetic)
-├── models/                # trained model weights
-├── src/                   # core pipeline modules (importable package)
-├── dashboard/             # Streamlit dashboard (app.py)
-├── api/                   # FastAPI backend (main.py)
-├── notebooks/             # Colab/Jupyter notebooks for training
-├── requirements.txt
-└── README.md
-```
+---
 
-## Setup
+## 📋 Overview
+
+AeroGuard is a hybrid Edge AI system that unifies two critical MRO functions into a single decision pipeline:
+
+1. **Intelligent Inspection** — YOLOv8-based computer vision detects surface defects (cracks, corrosion, dents, missing screws, chipped paint) on aircraft components
+2. **Predictive Maintenance** — LSTM-based Remaining Useful Life (RUL) prediction from sensor telemetry (vibration, temperature, pressure)
+
+These two signals are fused into a single **composite health index** per component, which drives automated maintenance recommendations — Monitor, Schedule, or Ground Immediately.
+
+The entire pipeline is designed to run at the edge, without cloud dependency, making it suitable for hangar environments with limited connectivity.
+
+---
+
+## 🏗️ Architecture
+┌─────────────────────┐
+
+│  Aircraft Images /   │
+
+│  Drone Camera Feed   │
+
+└──────────┬───────────┘
+
+│
+
+▼
+
+┌─────────────────────┐      ┌──────────────────────┐
+
+│   YOLOv8 Defect      │      │   Sensor Telemetry    │
+
+│   Detection (Edge)   │      │ (Vibration/Temp/Press)│
+
+└──────────┬───────────┘      └──────────┬────────────┘
+
+│                              │
+
+▼                              ▼
+
+┌─────────────────────┐      ┌──────────────────────┐
+
+│  Severity Estimation │      │  LSTM RUL Prediction  │
+
+└──────────┬───────────┘      └──────────┬────────────┘
+
+│                              │
+
+└──────────────┬───────────────┘
+
+▼
+
+┌─────────────────────┐
+
+│   Data Fusion Layer  │
+
+│  (Composite Health   │
+
+│       Index)         │
+
+└──────────┬───────────┘
+
+▼
+
+┌─────────────────────┐
+
+│ Maintenance          │
+
+│ Recommendation       │
+
+│ Dashboard            │
+
+└─────────────────────┘
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Defect Detection | YOLOv8 (Ultralytics) |
+| Predictive Maintenance | PyTorch (LSTM) |
+| Edge Deployment | ONNX Runtime |
+| Backend API | FastAPI |
+| Dashboard | Streamlit, Plotly |
+| Data Processing | Pandas, NumPy, scikit-learn |
+| Training Environment | Google Colab (T4 GPU) |
+| Datasets | NASA CMAPSS (RUL), Roboflow aerospace defect dataset |
+
+---
+
+## ⚙️ Installation
 
 ```bash
-# 1. Create and activate virtual environment
+# 1. Clone the repository
+git clone https://github.com/YOUR_USERNAME/AeroGuard.git
+cd AeroGuard
+
+# 2. Create and activate virtual environment
 python -m venv aeroguard_env
+aeroguard_env\Scripts\activate      # Windows
+source aeroguard_env/bin/activate   # Mac/Linux
 
-# Windows
-aeroguard_env\Scripts\activate
-# Mac/Linux
-source aeroguard_env/bin/activate
-
-# 2. Install dependencies
+# 3. Install dependencies
 pip install -r requirements.txt
-```
 
-## Running the app
-
-IMPORTANT: always run these commands from the **AeroGuard project root**
-folder (the one containing `src/`, `dashboard/`, `api/`), not from inside
-`dashboard/` or `api/`.
-
-```bash
-# Streamlit dashboard
+# 4. Run the dashboard
 streamlit run dashboard/app.py
 
-# FastAPI backend (in a separate terminal)
+# 5. (Optional) Run the backend API
 uvicorn api.main:app --reload --port 8000
 ```
 
-- Dashboard: http://localhost:8501
-- API docs: http://localhost:8000/docs
+Dashboard: `http://localhost:8501`
+API docs: `http://localhost:8000/docs`
 
-## Why the import error happened
+---
 
-Streamlit/FastAPI only know about the folder the script lives in unless
-told otherwise. Both `dashboard/app.py` and `api/main.py` add the project
-root to `sys.path` at the top of the file — this is what makes
-`from src.sensor_stream import ...` work. The `src/__init__.py` file is
-also required so Python recognizes `src` as a package.
+## 📸 Demo Screenshots
 
-## Training models (Google Colab)
+*(To be added)*
 
-See `notebooks/02_yolo_training.ipynb` and `notebooks/03_rul_training.ipynb`.
-After training, download `best.pt` (YOLO) and `rul_lstm.pt` + `scaler.pkl`
-(RUL model) and place them in:
+---
 
-```
-models/defect_detection/best.pt
-models/rul/rul_lstm.pt
-models/rul/scaler.pkl
-```
+## 👤 Team
 
-Until then, `src/detection.py` and `src/rul_model.py` automatically fall
-back to realistic mock outputs, so the dashboard and API work end-to-end
-even before training is complete.
+**Shweta Umbrajkar** — Solo Developer
+B.Tech Computer Science, VIIT Pune
+
+---
+
+## 📄 License
+
+This project was built for the InnoVent-27 hackathon submission.
